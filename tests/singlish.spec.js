@@ -1,0 +1,43 @@
+import { test, expect } from '@playwright/test';
+
+test('test @sanity', async ({ page }) => {
+  await page.goto('https://www.swifttranslator.com/');
+  await page.locator('div').filter({ hasText: 'FeaturesView SuggestionsUses' }).nth(3).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('mata bath oonee.');
+  await page.getByText('මට බත් ඕනේ').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('api paasal yanavaa.');
+  await page.getByText('අපි පාසල් යනවා').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('api kaeema kanavaa.');
+  await page.getByText('අපි කෑම කනවා').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('mama gedhara innee.');
+  await page.getByText('මම ගෙදර ඉන්නේ').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('mata nidhimathayi.');
+  await page.getByText('මට නිදිමතයි').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('matapaankannaoonee');
+  await page.locator('div').filter({ hasText: /^මටපාන්කන්නඕනේ$/ }).click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('adoo vaedak baaragaththaanam eeka hariyata karapanko bQQ.');
+  await page.getByText('අඩෝ වැඩක් බාරගත්තානම් ඒක හරියට කරපන්කො බං').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('eeka dhenna!!!??');
+  await page.getByText('ඒක දෙන්න!!!??').click();
+  await page.getByLabel('Clear').click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).click();
+  await page.getByRole('textbox', { name: 'Input Your Singlish Text Here.' }).fill('Rs. 5343, 7.30 AM, 2kg dennam.');
+  await page.getByText('Rs. 5343, 7.30 AM, 2kg ඩෙන්නම්').click();
+  await page.getByLabel('Clear').click();
+
+});
