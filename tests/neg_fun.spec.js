@@ -43,6 +43,34 @@ test.describe('Negative Functional Test Cases (Robustness & Edge Cases)', () => 
     expect(actualOutput).toBe(expectedOutput);
   }
 
+    // ✅ Neg_UI Helper: Rapid type + clear stress test (UI should not show stale output)
+  async function rapidTypeClearAndCheck() {
+    const inputBox = page.locator('textarea').first();
+    const outputLocator = page.locator('div.bg-slate-50');
+
+    // Start clean
+    await inputBox.click();
+    await inputBox.fill('');
+
+    // Type something (fast)
+    await inputBox.fill('mama gedhara yanavaa.');
+    await expect(outputLocator).not.toBeEmpty({ timeout: 20000 });
+
+    // Immediately clear + type new content quickly (race condition test)
+    await inputBox.fill('');
+    await inputBox.fill('api heta yanavaa.');
+
+    // Wait until output stabilizes (should reflect the last input, not the old one)
+    await expect(outputLocator).not.toBeEmpty({ timeout: 20000 });
+
+    const actualOutput = (await outputLocator.textContent())?.trim() ?? '';
+
+    // ✅ UI must show latest output, not stale previous output
+    expect(actualOutput).toBe('අපි හෙට යනවා');
+    expect(actualOutput).not.toBe('මම ගෙදර යනවා.');
+  }
+
+
   // --- Negative / Robustness Scenarios ---
 
   test('Neg_Fun_01: Joined words without spaces', async () => {
@@ -99,5 +127,10 @@ test.describe('Negative Functional Test Cases (Robustness & Edge Cases)', () => 
   test('Neg_Fun_12: Brand + joined word', async () => {
     await typeAndCheck('mama GoogleDrive eke file upload karalaa thiyenavaa', 'මම Google Drive එකේ file upload කරලා තියෙනවා');
   });
+
+    test('Neg_UI_01: Rapid type + clear should not keep stale output', async () => {
+    await rapidTypeClearAndCheck();
+  });
+
 
 });

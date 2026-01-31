@@ -32,6 +32,24 @@ async function typeAndCheck(input, expectedOutput) {
   expect(actual).toBe(expectedOutput);
 }
 
+async function clearAndCheckOutputEmpty() {
+  const inputBox = page.locator('textarea').first();
+  const outputLocator = page.locator('div.bg-slate-50').first();
+
+  // First generate output
+  await inputBox.fill('');
+  await inputBox.fill('mama gedhara yanavaa.');
+
+  await expect(outputLocator).toHaveText(/.+/, { timeout: 30000 });
+
+  // Now clear input
+  await inputBox.fill('');
+
+  // Output empty වෙලාද කියලා check කරනවා
+  await expect(outputLocator).toHaveText(/^\s*$/, { timeout: 10000 });
+}
+
+
   test('Pos_Fun_01: Imperative command @sanity', async () => {
     await typeAndCheck('roogiyaata vahaama oksijan dhenna.', 'රෝගියාට වහාම ඔක්සිජන් දෙන්න.');
   });
@@ -132,6 +150,10 @@ async function typeAndCheck(input, expectedOutput) {
   test('Pos_Fun_25: Punctuation (Exclamation) @sanity', async () => {
     await typeAndCheck('hari Shook!', 'හරි ෂෝක්!');
   });
+
+  test('Pos_UI_01: Clear input clears output @sanity', async () => {
+  await clearAndCheckOutputEmpty();
+});
 
 
  
