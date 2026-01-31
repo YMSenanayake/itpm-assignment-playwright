@@ -126,7 +126,7 @@ test.describe('Positive Functional Test Cases (Single Chromium Page)', () => {
     await typeAndCheck('No 12, malvaththa Road, Colombo 7.', 'No 12, මල්වත්ත Road, Colombo 7.');
   });
 
-  test('Pos_Fun_23: Collocation (Truth/Lies) @sanity', async () => {
+  test('Pos_Fun_23: Collocation @sanity', async () => {
     await typeAndCheck('boru kiyanna epaa.', 'බොරු කියන්න එපා.');
   });
 
