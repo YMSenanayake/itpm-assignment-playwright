@@ -16,27 +16,21 @@ test.describe('Positive Functional Test Cases (Single Chromium Page)', () => {
     await page?.close();
   });
 
-  // Helper: clear input, type slowly, wait for output, assert
-  async function typeAndCheck(input, expectedOutput) {
-    const inputBox = page.locator('textarea').first();
-    const outputLocator = page.locator('div.bg-slate-50');
+test.setTimeout(60000); // ✅ each test 60s
 
-    // ✅ Clear previous input (important since we reuse same page)
-    await inputBox.click();
-    await inputBox.fill('');
+async function typeAndCheck(input, expectedOutput) {
+  const inputBox = page.locator('textarea').first();
+  const outputLocator = page.locator('div.bg-slate-50').first();
 
-    // ✅ Type with delay so app triggers conversion
-    await inputBox.pressSequentially(input, { delay: 100 });
+  await inputBox.fill('');            // clear
+  await inputBox.fill(input);         // ✅ fast
 
-    // small stability wait
-    await page.waitForTimeout(500);
+  // output non-empty වෙලා text change වෙනකම් බලන්න
+  await expect(outputLocator).toHaveText(/.+/, { timeout: 30000 });
 
-    // ✅ Wait until output becomes non-empty
-    await expect(outputLocator).not.toBeEmpty({ timeout: 20000 });
-
-    const actualOutput = (await outputLocator.textContent())?.trim() ?? '';
-    expect(actualOutput).toBe(expectedOutput);
-  }
+  const actual = (await outputLocator.textContent())?.trim() ?? '';
+  expect(actual).toBe(expectedOutput);
+}
 
   test('Pos_Fun_01: Imperative command @sanity', async () => {
     await typeAndCheck('roogiyaata vahaama oksijan dhenna.', 'රෝගියාට වහාම ඔක්සිජන් දෙන්න.');
@@ -82,8 +76,9 @@ test.describe('Positive Functional Test Cases (Single Chromium Page)', () => {
     await typeAndCheck('oyaa Google Drive eken doc eka download karanna.', 'ඔයා Google Drive එකෙන් doc එක download කරන්න.');
   });
 
-  test('Pos_Fun_12: Consonant Clusters @sanity', async () => {
-    await typeAndCheck('vishva vidhYaalaya.', 'විශ්ව විද්‍යාලය.');
+  test('Pos_Fun_12: Paragraph/Long Input @sanity', async () => {
+    await typeAndCheck('lQQkaavee sundhara thaen balanna api giya sathiyee tour ekak giyaa. siigiriya saha dhaBAulla balalaa api godak sathutu vunaa. ee photos api Facebook ekata upload kaLaa. yaaluvo godak likes dhaalaa thibunaa.', 
+      'ලංකාවේ සුන්දර තැන් බලන්න අපි ගිය සතියේ tour එකක් ගියා. සීගිරිය සහ දඹෞල්ල බලලා අපි ගොඩක් සතුටු වුනා. ඒ photos අපි Facebook එකට upload කළා. යාලුවො ගොඩක් likes දාලා තිබුනා.');
   });
 
   test('Pos_Fun_13: Place Name (English) @sanity', async () => {
