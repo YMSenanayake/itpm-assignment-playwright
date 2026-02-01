@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.use({ browserName: 'chromium' });
 
 test.describe('Positive Functional Test Cases (Single Chromium Page)', () => {
-  test.describe.configure({ mode: 'serial' }); // ✅ allow sharing same page safely
+  test.describe.configure({ mode: 'serial' });
 
   let page;
 
@@ -16,16 +16,15 @@ test.describe('Positive Functional Test Cases (Single Chromium Page)', () => {
     await page?.close();
   });
 
-test.setTimeout(60000); // ✅ each test 60s
+test.setTimeout(60000); 
 
 async function typeAndCheck(input, expectedOutput) {
   const inputBox = page.locator('textarea').first();
   const outputLocator = page.locator('div.bg-slate-50').first();
 
-  await inputBox.fill('');            // clear
-  await inputBox.fill(input);         // ✅ fast
+  await inputBox.fill('');     
+  await inputBox.fill(input); 
 
-  // output non-empty වෙලා text change වෙනකම් බලන්න
   await expect(outputLocator).toHaveText(/.+/, { timeout: 30000 });
 
   const actual = (await outputLocator.textContent())?.trim() ?? '';
@@ -36,16 +35,14 @@ async function clearAndCheckOutputEmpty() {
   const inputBox = page.locator('textarea').first();
   const outputLocator = page.locator('div.bg-slate-50').first();
 
-  // First generate output
+ 
   await inputBox.fill('');
   await inputBox.fill('mama gedhara yanavaa.');
 
   await expect(outputLocator).toHaveText(/.+/, { timeout: 30000 });
 
-  // Now clear input
   await inputBox.fill('');
 
-  // Output empty වෙලාද කියලා check කරනවා
   await expect(outputLocator).toHaveText(/^\s*$/, { timeout: 10000 });
 }
 
